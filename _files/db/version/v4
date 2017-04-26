@@ -1,0 +1,15 @@
+/************ Update: Tables ***************/
+
+/******************** Update Table: inplanet_archivos ************************/
+
+ALTER TABLE public.inplanet_archivos ALTER COLUMN url_pdf TYPE VARCHAR(500);
+ALTER TABLE public.inplanet_archivos ALTER COLUMN url_pdf DROP NOT NULL;
+
+ALTER TABLE public.inplanet_archivos ALTER COLUMN pdf TYPE BYTEA;
+ALTER TABLE public.inplanet_archivos ALTER COLUMN pdf DROP NOT NULL;
+
+ALTER TABLE public.inplanet_archivos ALTER COLUMN url_xml TYPE VARCHAR(500);
+ALTER TABLE public.inplanet_archivos ALTER COLUMN url_xml DROP NOT NULL;
+
+ALTER TABLE public.inplanet_archivos ALTER COLUMN xml TYPE BYTEA;
+ALTER TABLE public.inplanet_archivos ALTER COLUMN xml DROP NOT NULL;

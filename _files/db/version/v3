@@ -1,0 +1,186 @@
+/************ Update: Tables ***************/
+
+/******************** Add Table: public.inplanet ************************/
+
+/* Build Table Structure */
+CREATE TABLE public.inplanet
+(
+	id NUMERIC(20, 0) NOT NULL,
+	ruc VARCHAR(50) NOT NULL,
+	"razonSocial" VARCHAR(100) NOT NULL,
+	"dirMatriz" VARCHAR(250) NOT NULL
+) WITHOUT OIDS;
+
+/* Add Primary Key */
+ALTER TABLE public.inplanet ADD CONSTRAINT pkinplanet
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "inplanet_id_Idx" ON public.inplanet USING btree (id);
+
+CREATE UNIQUE INDEX "inplanet_ruc_Idx" ON public.inplanet USING btree (ruc);
+
+
+/******************** Add Table: public.inplanet_archivos ************************/
+
+/* Build Table Structure */
+CREATE TABLE public.inplanet_archivos
+(
+	id NUMERIC(20, 0) NOT NULL,
+	"id_infoFactura" NUMERIC(20, 0) NOT NULL,
+	url_pdf VARCHAR(500) NOT NULL,
+	pdf BYTEA NOT NULL,
+	url_xml VARCHAR(500) NOT NULL,
+	xml BYTEA NOT NULL
+) WITHOUT OIDS;
+
+/* Add Primary Key */
+ALTER TABLE public.inplanet_archivos ADD CONSTRAINT pkinplanet_archivos
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "inplanet_archivos_id_Idx" ON public.inplanet_archivos USING btree (id);
+
+CREATE INDEX "inplanet_archivos_id_infoFactura_Idx" ON public.inplanet_archivos USING btree ("id_infoFactura");
+
+CREATE INDEX "inplanet_archivos_url_pdf_Idx" ON public.inplanet_archivos USING btree (url_pdf);
+
+CREATE INDEX "inplanet_archivos_url_xml_Idx" ON public.inplanet_archivos USING btree (url_xml);
+
+
+/******************** Add Table: public.inplanet_detalles ************************/
+
+/* Build Table Structure */
+CREATE TABLE public.inplanet_detalles
+(
+	id NUMERIC(20, 0) NOT NULL,
+	"id_infoFactura" NUMERIC(20, 0) NOT NULL,
+	descripcion VARCHAR(250) NOT NULL,
+	cantidad NUMERIC(20, 2) NOT NULL,
+	"precioUnitario" NUMERIC(20, 2) NOT NULL,
+	descuento NUMERIC(20, 2) NOT NULL,
+	"precioTotalSinImpuesto" NUMERIC(20, 2) NOT NULL
+) WITHOUT OIDS;
+
+/* Add Primary Key */
+ALTER TABLE public.inplanet_detalles ADD CONSTRAINT pkinplanet_detalles
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "inplanet_detalles_id_Idx" ON public.inplanet_detalles USING btree (id);
+
+CREATE INDEX "inplanet_detalles_id_infoFactura_Idx" ON public.inplanet_detalles USING btree ("id_infoFactura");
+
+
+/******************** Add Table: public.inplanet_impuestos ************************/
+
+/* Build Table Structure */
+CREATE TABLE public.inplanet_impuestos
+(
+	id NUMERIC(20, 0) NOT NULL,
+	codigo INTEGER NOT NULL,
+	"codigoPorcentaje" INTEGER NOT NULL,
+	tarifa NUMERIC(20, 2) NOT NULL,
+	"baseImponible" NUMERIC(20, 2) NOT NULL,
+	valor NUMERIC(20, 2) NOT NULL,
+	id_detalles NUMERIC(20, 0) NOT NULL
+) WITHOUT OIDS;
+
+/* Add Primary Key */
+ALTER TABLE public.inplanet_impuestos ADD CONSTRAINT pkinplanet_impuestos
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "inplanet_impuestos_id_Idx" ON public.inplanet_impuestos USING btree (id);
+
+CREATE INDEX "inplanet_impuestos_id_detalles_Idx" ON public.inplanet_impuestos USING btree (id_detalles);
+
+
+/******************** Add Table: "public"."inplanet_infoFactura" ************************/
+
+/* Build Table Structure */
+CREATE TABLE "public"."inplanet_infoFactura"
+(
+	id NUMERIC(20, 0) NOT NULL,
+	"fechaEmision" DATE NOT NULL,
+	"obligadoContabilidad" VARCHAR(5) NOT NULL,
+	"tipoIdentificacionComprador" VARCHAR(10) NOT NULL,
+	"razonSocialComprador" VARCHAR(250) NOT NULL,
+	"identificacionComprador" VARCHAR(30) NOT NULL,
+	"importeTotal" NUMERIC(20, 2) NOT NULL,
+	moneda VARCHAR(10) NOT NULL,
+	"id_infoTributaria" NUMERIC(20, 0) NOT NULL,
+	telefono VARCHAR(150) NULL,
+	direccion VARCHAR(500) NULL,
+	email VARCHAR(100) NULL
+) WITHOUT OIDS;
+
+/* Add Primary Key */
+ALTER TABLE "public"."inplanet_infoFactura" ADD CONSTRAINT "pkinplanet_infoFactura"
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "inplanet_infoFactura_id_Idx" ON "public"."inplanet_infoFactura" USING btree (id);
+
+CREATE UNIQUE INDEX "inplanet_infoFactura_id_infoTributaria_Idx" ON "public"."inplanet_infoFactura" USING btree ("id_infoTributaria");
+
+CREATE UNIQUE INDEX "inplanet_infoFactura_identificacionComprador_Idx" ON "public"."inplanet_infoFactura" USING btree ("identificacionComprador");
+
+
+/******************** Add Table: "public"."inplanet_infoTributaria" ************************/
+
+/* Build Table Structure */
+CREATE TABLE "public"."inplanet_infoTributaria"
+(
+	id NUMERIC(20, 0) NOT NULL,
+	ambiente INTEGER NOT NULL,
+	"tipoEmision" INTEGER NOT NULL,
+	id_inplanet NUMERIC(20, 0) NOT NULL,
+	"claveAcceso" VARCHAR(250) NOT NULL,
+	"codDoc" VARCHAR(10) NOT NULL,
+	estab VARCHAR(10) NOT NULL,
+	"ptoEmi" VARCHAR(10) NOT NULL,
+	secuencial VARCHAR(10) NOT NULL
+) WITHOUT OIDS;
+
+/* Add Primary Key */
+ALTER TABLE "public"."inplanet_infoTributaria" ADD CONSTRAINT "pkinplanet_infoTributaria"
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "inplanet_infoTributaria_claveAcceso_Idx" ON "public"."inplanet_infoTributaria" USING btree ("claveAcceso");
+
+CREATE UNIQUE INDEX "inplanet_infoTributaria_id_Idx" ON "public"."inplanet_infoTributaria" USING btree (id);
+
+CREATE UNIQUE INDEX "inplanet_infoTributaria_secuencial_Idx" ON "public"."inplanet_infoTributaria" USING btree (secuencial);
+
+
+
+
+
+/************ Add Foreign Keys ***************/
+
+/* Add Foreign Key: fk_inplanet_archivos_inplanet_infoFactura */
+ALTER TABLE public.inplanet_archivos ADD CONSTRAINT "fk_inplanet_archivos_inplanet_infoFactura"
+	FOREIGN KEY ("id_infoFactura") REFERENCES "public"."inplanet_infoFactura" (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_inplanet_detalles_inplanet_infoFactura */
+ALTER TABLE public.inplanet_detalles ADD CONSTRAINT "fk_inplanet_detalles_inplanet_infoFactura"
+	FOREIGN KEY ("id_infoFactura") REFERENCES "public"."inplanet_infoFactura" (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_inplanet_impuestos_inplanet_detalles */
+ALTER TABLE public.inplanet_impuestos ADD CONSTRAINT fk_inplanet_impuestos_inplanet_detalles
+	FOREIGN KEY (id_detalles) REFERENCES public.inplanet_detalles (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_inplanet_infoFactura_inplanet_infoTributaria */
+ALTER TABLE "public"."inplanet_infoFactura" ADD CONSTRAINT "fk_inplanet_infoFactura_inplanet_infoTributaria"
+	FOREIGN KEY ("id_infoTributaria") REFERENCES "public"."inplanet_infoTributaria" (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_inplanet_infoTributaria_inplanet */
+ALTER TABLE "public"."inplanet_infoTributaria" ADD CONSTRAINT "fk_inplanet_infoTributaria_inplanet"
+	FOREIGN KEY (id_inplanet) REFERENCES public.inplanet (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;

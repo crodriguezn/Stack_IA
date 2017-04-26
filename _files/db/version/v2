@@ -1,0 +1,5 @@
+/************ Update: Tables ***************/
+
+/******************** Update Table: person ************************/
+
+ALTER TABLE public.person ADD "isCapture" SMALLINT NULL;

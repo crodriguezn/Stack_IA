@@ -1,0 +1,63 @@
+/************ Update: Tables ***************/
+
+/******************** Add Table: public.person ************************/
+
+/* Build Table Structure */
+CREATE TABLE public.person
+(
+	id NUMERIC(20, 0) NOT NULL,
+	document VARCHAR(50) NOT NULL,
+	surname VARCHAR(100) NOT NULL,
+	name VARCHAR(100) NOT NULL,
+	birthday DATE NOT NULL
+);
+
+/* Add Primary Key */
+ALTER TABLE public.person ADD CONSTRAINT pkperson
+	PRIMARY KEY (id);
+
+/* Add Indexes */
+CREATE UNIQUE INDEX "person_document_Idx" ON public.person (document);
+
+CREATE INDEX "person_id_Idx" ON public.person (id);
+
+CREATE INDEX "person_surname_Idx" ON public.person (surname);
+
+
+/******************** Update Table: user ************************/
+
+ALTER TABLE public.user ALTER COLUMN id TYPE NUMERIC(20, 0);
+
+ALTER TABLE public.user RENAME name TO username;
+ALTER TABLE public.user ALTER COLUMN username TYPE VARCHAR(50);
+ALTER TABLE public.user ALTER COLUMN username SET NOT NULL;
+
+ALTER TABLE public.user RENAME state TO password;
+ALTER TABLE public.user ALTER COLUMN password TYPE VARCHAR(255);
+ALTER TABLE public.user ALTER COLUMN password SET NOT NULL;
+
+/* PostgreSQL does not support adding NOT NULL columns in a single command line. */
+ALTER TABLE public.user ADD COLUMN id_person NUMERIC(20, 0);
+ALTER TABLE public.user ALTER COLUMN id_person SET NOT NULL;
+
+/* PostgreSQL does not support adding NOT NULL columns in a single command line. */
+ALTER TABLE public.user ADD COLUMN "isActive" SMALLINT;
+ALTER TABLE public.user ALTER COLUMN "isActive" SET NOT NULL;
+
+/* Add Indexes */
+CREATE INDEX "user_id_Idx" ON public.user (id);
+
+CREATE INDEX "user_id_person_Idx" ON public.user (id_person);
+
+CREATE UNIQUE INDEX "user_username_Idx" ON public.user (username);
+
+
+
+
+
+/************ Add Foreign Keys ***************/
+
+/* Add Foreign Key: fk_user_person */
+ALTER TABLE public.user ADD CONSTRAINT fk_user_person
+	FOREIGN KEY (id_person) REFERENCES public.person (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
